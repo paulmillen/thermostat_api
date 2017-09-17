@@ -19,7 +19,6 @@ class App < Sinatra::Base
   end
 
   get '/thermostat' do
-    p params.inspect
     user = Thermostat.authenticate(params[:api_key])
     data = { temperature: user.temperature, psm: user.psm, city: user.city }
     data.to_json
@@ -27,13 +26,11 @@ class App < Sinatra::Base
 
   post '/thermostat' do
     user = Thermostat.authenticate(params[:api_key])
-    p params
     user.temperature = params[:temperature]
     user.psm = params[:psm]
     user.city = params[:city]
     user.save
     DataMapper.auto_upgrade!
-    p user.save
   end
 
   options '*' do
